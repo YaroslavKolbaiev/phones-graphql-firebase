@@ -1,0 +1,43 @@
+type Query {
+  product(id: ID!): Product
+  products(
+    type: String
+    limit: Int
+    startAt: String
+    sort: String
+  ): ProductSublist
+  favorites(userId: ID!): [Favorites]
+}
+
+type ProductSublist {
+  products: [Product!]
+  totalPhones: Int!
+  totalTablets: Int!
+  totalAccessories: Int!
+}
+
+type Favorites {
+  id: ID!
+  userId: String!
+  productId: String!
+  product: Product
+}
+
+type Product {
+  id: ID
+  name: String!
+  model: String!
+  type: String!
+  price: Int!
+  imageUrl: String!
+  createdAt: String!
+  screen: String
+  capacity: [String]
+  ram: String
+  age: Int
+  discount: Int
+  snippet: String
+  resolution: String
+  processor: String
+  camera: String
+}

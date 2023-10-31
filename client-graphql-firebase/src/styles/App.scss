@@ -1,0 +1,21 @@
+iframe {
+  display: none;
+}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+
+.App {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+@import 'utils.scss';
+
+@import 'src/styles/navibar.scss';
+@import 'src/styles/baner.scss';
+@import 'src/styles/productCard.scss';
+@import 'src/styles/productDetails.scss';
+@import 'src/styles/filter.scss';
+@import 'src/styles/sortMenu.scss';
