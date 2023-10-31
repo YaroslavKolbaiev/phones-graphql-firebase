@@ -1,9 +1,7 @@
-import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BreadCrumb } from '../../components/Breadcrumb';
 import { NoProductsWaring } from '../../components/NoProductsWaring';
 import { ProductCard } from '../../components/ProductCard';
-import { ProductsContext } from '../../context/ProductsContext';
 import { useAppSelector } from '../../hooks/ReduxApp';
 
 export const Favourites = () => {

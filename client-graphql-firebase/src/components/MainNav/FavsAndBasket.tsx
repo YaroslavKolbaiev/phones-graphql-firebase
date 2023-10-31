@@ -1,14 +1,10 @@
 import classNames from 'classnames';
-import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ProductsContext } from '../../context/ProductsContext';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBasket3 } from 'react-icons/bs';
 import { useAppSelector } from '../../hooks/ReduxApp';
 
 export const FavsAndBasket: React.FC = () => {
-  // const { favProducts, cart } = useContext(ProductsContext);
-
   const { favorites } = useAppSelector((state) => state.favorites);
 
   return (
@@ -21,15 +17,11 @@ export const FavsAndBasket: React.FC = () => {
           })
         }
       >
-        {favorites.length ? (
-          <AiOutlineHeart
-            size="24px"
-            className="navibar__icon--hidden 
-              has-badge-rounded 
-              has-badge-danger
-            "
-            data-badge={favorites.length}
-          />
+        {favorites?.length ? (
+          <div className="is-relative is-flex">
+            <AiOutlineHeart size="24px" className="navibar__icon--hidden" />
+            <span className="badge">{favorites?.length}</span>
+          </div>
         ) : (
           <AiOutlineHeart size="24px" className="navibar__icon--hidden" />
         )}

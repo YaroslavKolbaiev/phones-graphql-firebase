@@ -8,11 +8,6 @@ type Props = {
 };
 
 export const Pagination: React.FC<Props> = ({ totalItems, itemsPerPage }) => {
-  // const pageNumbers = [];
-
-  // for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i += 1) {
-  //   pageNumbers.push(i);
-  // }
   const [searchParams] = useSearchParams();
 
   const page = searchParams.get('page') || '1';
