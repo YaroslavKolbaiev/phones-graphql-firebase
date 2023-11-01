@@ -41,3 +41,7 @@ type Product {
   processor: String
   camera: String
 }
+
+type Mutation {
+  addFavorite(userId: String!, productId: String!): Favorites
+}

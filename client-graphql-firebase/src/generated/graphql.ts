@@ -23,6 +23,16 @@ export type Favorites = {
   userId: Scalars['String']['output'];
 };
 
+export type Mutation = {
+  addFavorite?: Maybe<Favorites>;
+};
+
+
+export type MutationAddFavoriteArgs = {
+  productId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type Product = {
   age?: Maybe<Scalars['Int']['output']>;
   camera?: Maybe<Scalars['String']['output']>;

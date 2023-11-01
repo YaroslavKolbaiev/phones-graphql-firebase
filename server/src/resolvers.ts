@@ -1,7 +1,11 @@
 import { GraphQLError } from 'graphql';
 import { getProduct, getProducts } from './firebase/products.js';
-import { Resolvers } from './generated/schema.js';
-import { favProducts, favoritesByUser } from './firebase/favProducts.js';
+import { Favorites, Resolvers } from './generated/schema.js';
+import {
+  addFavorite,
+  favProducts,
+  favoritesByUser,
+} from './firebase/favProducts.js';
 
 export const resolvers: Resolvers = {
   Query: {
@@ -25,6 +29,9 @@ export const resolvers: Resolvers = {
     product: (parentIsFavorites) => {
       return favProducts(parentIsFavorites.productId);
     },
+  },
+  Mutation: {
+    addFavorite: (_root, args) => addFavorite(args),
   },
 };
 

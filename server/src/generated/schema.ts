@@ -24,6 +24,16 @@ export type Favorites = {
   userId: Scalars['String']['output'];
 };
 
+export type Mutation = {
+  addFavorite?: Maybe<Favorites>;
+};
+
+
+export type MutationAddFavoriteArgs = {
+  productId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
 export type Product = {
   age?: Maybe<Scalars['Int']['output']>;
   camera?: Maybe<Scalars['String']['output']>;
@@ -149,6 +159,7 @@ export type ResolversTypes = {
   Favorites: ResolverTypeWrapper<Favorites>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
   ProductSublist: ResolverTypeWrapper<ProductSublist>;
   Query: ResolverTypeWrapper<{}>;
@@ -161,6 +172,7 @@ export type ResolversParentTypes = {
   Favorites: Favorites;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Mutation: {};
   Product: Product;
   ProductSublist: ProductSublist;
   Query: {};
@@ -173,6 +185,10 @@ export type FavoritesResolvers<ContextType = any, ParentType extends ResolversPa
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addFavorite?: Resolver<Maybe<ResolversTypes['Favorites']>, ParentType, ContextType, RequireFields<MutationAddFavoriteArgs, 'productId' | 'userId'>>;
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
@@ -211,6 +227,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type Resolvers<ContextType = any> = {
   Favorites?: FavoritesResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductSublist?: ProductSublistResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
