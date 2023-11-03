@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { PRODUCT_FRAGMENT, getFavorites } from '../../graphql/queries';
 import { getFragmentData } from '../../generated';
 import { ProductDetailsFragment } from '../../generated/graphql';
 
-interface Favorites {
+export interface Favorites {
   id: string;
   productId: string;
   userId: string;
@@ -14,7 +14,7 @@ const initialState: { favorites: Favorites[] } = {
   favorites: [],
 };
 
-export const init = createAsyncThunk(
+export const initFavorites = createAsyncThunk(
   'favorites/fetch',
   async (userId: string) => {
     const { favorites } = await getFavorites(userId);
@@ -41,12 +41,17 @@ export const init = createAsyncThunk(
 const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
-  reducers: {},
+  reducers: {
+    add: (state, action: PayloadAction<Favorites>) => {
+      state.favorites.push(action.payload);
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(init.fulfilled, (state, action) => {
+    builder.addCase(initFavorites.fulfilled, (state, action) => {
       state.favorites = action.payload;
     });
   },
 });
 
+export const { actions } = favoritesSlice;
 export default favoritesSlice.reducer;

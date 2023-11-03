@@ -12,19 +12,8 @@ import { AuthPage } from './Pages/Auth';
 import { UserPage } from './Pages/UserPage';
 import { NotAuth } from './middleware/notAuth';
 import { IsAuth } from './middleware/isAuth';
-import { useAppDispatch, useAppSelector } from './hooks/ReduxApp';
-import * as favoritesActions from './redux/features/favorites';
-import { useEffect } from 'react';
 
 export const App = () => {
-  const dispatch = useAppDispatch();
-
-  const { userData } = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    dispatch(favoritesActions.init(userData?.uid));
-  }, [userData]);
-
   return (
     <ProductsProvider>
       <div className="App">

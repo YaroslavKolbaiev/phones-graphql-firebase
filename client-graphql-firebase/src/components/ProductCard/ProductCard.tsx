@@ -38,7 +38,9 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         <hr className="mb-2 mt-0" />
         <SpecsPart product={product} />
 
-        {userData && <CardButtons productId={product.id} />}
+        {userData && (
+          <CardButtons userId={userData.uid} productId={product.id} />
+        )}
       </div>
     </div>
   );

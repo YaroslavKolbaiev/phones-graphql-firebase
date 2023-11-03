@@ -1,16 +1,32 @@
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useAppSelector } from '../../../hooks/ReduxApp';
+import { useAppDispatch, useAppSelector } from '../../../hooks/ReduxApp';
+import {
+  Favorites,
+  actions as favoritesActions,
+} from '../../../redux/features/favorites';
+import { addFavorite } from '../../../graphql/queries';
 
 type Props = {
   productId: string;
+  userId: string;
 };
 
-export const CardButtons: React.FC<Props> = ({ productId }) => {
+export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
+  const dispatch = useAppDispatch();
   const { favorites } = useAppSelector((state) => state.favorites);
+  const setFavorite = (payload) => {
+    dispatch(favoritesActions.add(payload));
+  };
 
   const isFavourite = favorites?.some(
     (favProduct) => favProduct.productId === productId
   );
+
+  const onAddFavorite = async () => {
+    const favorite = await addFavorite({ productId, userId });
+
+    return setFavorite(favorite);
+  };
 
   return (
     <p className="buttons">
@@ -41,19 +57,19 @@ export const CardButtons: React.FC<Props> = ({ productId }) => {
           Add to cart
         </button>
       )}
-      <button
-        type="button"
-        className="button"
-        // onClick={handleFavorites}
-      >
-        <span className="icon">
-          {isFavourite ? (
+      {isFavourite ? (
+        <button type="button" className="button">
+          <span className="icon">
             <AiFillHeart size="24px" className="has-text-danger-dark" />
-          ) : (
+          </span>
+        </button>
+      ) : (
+        <button type="button" className="button" onClick={onAddFavorite}>
+          <span className="icon">
             <AiOutlineHeart size="24px" />
-          )}
-        </span>
-      </button>
+          </span>
+        </button>
+      )}
     </p>
   );
 };

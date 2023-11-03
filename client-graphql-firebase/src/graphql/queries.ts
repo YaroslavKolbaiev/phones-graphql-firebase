@@ -62,6 +62,19 @@ export const FAVORITES_QUERY = graphql(`
   }
 `);
 
+export const ADD_FAVORITE = graphql(`
+  mutation AddFavorite($userId: String!, $productId: String!) {
+    favorite: addFavorite(userId: $userId, productId: $productId) {
+      id
+      product {
+        ...productDetails
+      }
+      productId
+      userId
+    }
+  }
+`);
+
 export async function getProducts({
   type,
   limit,
@@ -102,6 +115,24 @@ export async function getFavorites(userId: string) {
     });
 
     return { favorites: res.data.favorites };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+interface AddFavoriteProps {
+  userId: string;
+  productId: string;
+}
+
+export async function addFavorite(args: AddFavoriteProps) {
+  try {
+    const res = await apolloClient.mutate({
+      mutation: ADD_FAVORITE,
+      variables: args,
+    });
+
+    return res.data.favorite;
   } catch (error) {
     return { error: error.message };
   }

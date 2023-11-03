@@ -17,6 +17,7 @@ const documents = {
     "\n  query Products($type: String, $limit: Int, $startAt: String, $sort: String) {\n    products(type: $type, limit: $limit, startAt: $startAt, sort: $sort) {\n      products {\n        ...productDetails\n      }\n      totalAccessories\n      totalPhones\n      totalTablets\n    }\n  }\n": types.ProductsDocument,
     "\n  query Product($productId: ID!) {\n    product(id: $productId) {\n      ...productDetails\n    }\n  }\n": types.ProductDocument,
     "\n  query Favorites($userId: ID!) {\n    favorites(userId: $userId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n": types.FavoritesDocument,
+    "\n  mutation AddFavorite($userId: String!, $productId: String!) {\n    favorite: addFavorite(userId: $userId, productId: $productId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n": types.AddFavoriteDocument,
 };
 
 /**
@@ -49,6 +50,10 @@ export function graphql(source: "\n  query Product($productId: ID!) {\n    produ
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  query Favorites($userId: ID!) {\n    favorites(userId: $userId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n"): (typeof documents)["\n  query Favorites($userId: ID!) {\n    favorites(userId: $userId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation AddFavorite($userId: String!, $productId: String!) {\n    favorite: addFavorite(userId: $userId, productId: $productId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation AddFavorite($userId: String!, $productId: String!) {\n    favorite: addFavorite(userId: $userId, productId: $productId) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
