@@ -26,12 +26,18 @@ export type Favorites = {
 
 export type Mutation = {
   addFavorite?: Maybe<Favorites>;
+  deleteFavorite?: Maybe<Favorites>;
 };
 
 
 export type MutationAddFavoriteArgs = {
   productId: Scalars['String']['input'];
   userId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteFavoriteArgs = {
+  favoritId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Product = {
@@ -189,6 +195,7 @@ export type FavoritesResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addFavorite?: Resolver<Maybe<ResolversTypes['Favorites']>, ParentType, ContextType, RequireFields<MutationAddFavoriteArgs, 'productId' | 'userId'>>;
+  deleteFavorite?: Resolver<Maybe<ResolversTypes['Favorites']>, ParentType, ContextType, Partial<MutationDeleteFavoriteArgs>>;
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {

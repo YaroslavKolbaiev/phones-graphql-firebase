@@ -32,12 +32,12 @@ export async function favoritesByUser(userId: string) {
   return favorites as Favorites[];
 }
 
-interface AddFavProps {
+interface Favs {
   productId: string;
   userId: string;
 }
 
-export async function addFavorite(args: AddFavProps) {
+export async function addFavorite(args: Favs) {
   const collectionRef = connection.collection('favorites');
   const snapshot = await collectionRef
     .where('productId', '==', args.productId)
@@ -56,4 +56,18 @@ export async function addFavorite(args: AddFavProps) {
   };
 
   return favorite;
+}
+
+export async function deleteFavorite(favId: string) {
+  const favRef = connection.collection('favorites').doc(favId);
+
+  const favoriteToBeDeleted = (await favRef.get()).data() as Favs;
+
+  if (!favoriteToBeDeleted) {
+    throw new Error('Product not found');
+  }
+
+  await favRef.delete();
+
+  return { id: favRef.id, ...favoriteToBeDeleted };
 }

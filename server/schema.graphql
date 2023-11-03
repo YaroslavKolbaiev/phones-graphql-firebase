@@ -44,4 +44,5 @@ type Product {
 
 type Mutation {
   addFavorite(userId: String!, productId: String!): Favorites
+  deleteFavorite(favoritId: String): Favorites
 }

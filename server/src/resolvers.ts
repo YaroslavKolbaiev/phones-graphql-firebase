@@ -3,6 +3,7 @@ import { getProduct, getProducts } from './firebase/products.js';
 import { Favorites, Resolvers } from './generated/schema.js';
 import {
   addFavorite,
+  deleteFavorite,
   favProducts,
   favoritesByUser,
 } from './firebase/favProducts.js';
@@ -32,6 +33,7 @@ export const resolvers: Resolvers = {
   },
   Mutation: {
     addFavorite: (_root, args) => addFavorite(args),
+    deleteFavorite: (_root, { favoritId }) => deleteFavorite(favoritId),
   },
 };
 
