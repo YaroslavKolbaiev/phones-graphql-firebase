@@ -19,7 +19,7 @@ export const Favourites = () => {
 
   const visibleFavProducts = useMemo(() => {
     return favorites.slice(indexOfFirstItem, indexOfLastItem);
-  }, [page]);
+  }, [page, favorites]);
 
   return (
     <div className="is-flex-grow-1">

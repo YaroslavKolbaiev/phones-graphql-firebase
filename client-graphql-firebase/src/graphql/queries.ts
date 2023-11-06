@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import { graphql } from '../generated';
+import { getFragmentData, graphql } from '../generated';
 import { GetProductsProps } from '../types/getProductsProps';
+import { Favorites } from '../generated/graphql';
 
 export const apolloClient = new ApolloClient({
   uri: 'http://localhost:9000/graphql',
@@ -75,6 +76,16 @@ export const ADD_FAVORITE = graphql(`
   }
 `);
 
+export const DELETE_FAVORITE = graphql(`
+  mutation DeleteFavorite($favoritId: String) {
+    favoriteData: deleteFavorite(favoritId: $favoritId) {
+      id
+      productId
+      userId
+    }
+  }
+`);
+
 export async function getProducts({
   type,
   limit,
@@ -90,7 +101,7 @@ export async function getProducts({
 
     return { products: res.data.products };
   } catch (error) {
-    return { error: error.message };
+    throw { error: error.message };
   }
 }
 
@@ -103,7 +114,7 @@ export async function getProduct(productId: string) {
 
     return { product: res.data.product };
   } catch (error) {
-    return { error: error.message };
+    throw { error: error.message };
   }
 }
 
@@ -114,9 +125,24 @@ export async function getFavorites(userId: string) {
       variables: { userId },
     });
 
-    return { favorites: res.data.favorites };
+    const favoritesWithFragment: Favorites[] = [];
+
+    res.data.favorites.forEach((fav) => {
+      const { id, productId, userId, product } = fav;
+
+      const productFragmentData = getFragmentData(PRODUCT_FRAGMENT, product);
+
+      favoritesWithFragment.push({
+        id,
+        productId,
+        userId,
+        product: productFragmentData,
+      });
+    });
+
+    return { favorites: favoritesWithFragment };
   } catch (error) {
-    return { error: error.message };
+    throw { error: error.message };
   }
 }
 
@@ -132,8 +158,25 @@ export async function addFavorite(args: AddFavoriteProps) {
       variables: args,
     });
 
-    return res.data.favorite;
+    const { id, productId, userId, product } = res.data.favorite;
+
+    const productFragmentData = getFragmentData(PRODUCT_FRAGMENT, product);
+
+    return { id, productId, userId, product: productFragmentData };
   } catch (error) {
-    return { error: error.message };
+    throw { error: error.message };
+  }
+}
+
+export async function deleteFavorite(favoritId: string) {
+  try {
+    const res = await apolloClient.mutate({
+      mutation: DELETE_FAVORITE,
+      variables: { favoritId },
+    });
+
+    return res.data.favoriteData;
+  } catch (error) {
+    throw { error: error.message };
   }
 }

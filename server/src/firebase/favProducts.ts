@@ -1,6 +1,5 @@
 import { Favorites, Product } from '../generated/schema.js';
 import { connection } from './connection.js';
-import { getProduct } from './products.js';
 
 export async function favProducts(productId: string) {
   const collectionRef = connection.collection('products').doc(productId);
@@ -9,7 +8,6 @@ export async function favProducts(productId: string) {
 
   const product = { id: productId, ...snapshot.data() };
 
-  // return snapshot.data() as Product;
   return product as Product;
 }
 

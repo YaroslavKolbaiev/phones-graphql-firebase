@@ -1,10 +1,7 @@
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../../hooks/ReduxApp';
-import {
-  Favorites,
-  actions as favoritesActions,
-} from '../../../redux/features/favorites';
-import { addFavorite } from '../../../graphql/queries';
+import { actions as favoritesActions } from '../../../redux/features/favorites';
+import { addFavorite, deleteFavorite } from '../../../graphql/queries';
 
 type Props = {
   productId: string;
@@ -14,9 +11,6 @@ type Props = {
 export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
   const dispatch = useAppDispatch();
   const { favorites } = useAppSelector((state) => state.favorites);
-  const setFavorite = (payload) => {
-    dispatch(favoritesActions.add(payload));
-  };
 
   const isFavourite = favorites?.some(
     (favProduct) => favProduct.productId === productId
@@ -25,7 +19,15 @@ export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
   const onAddFavorite = async () => {
     const favorite = await addFavorite({ productId, userId });
 
-    return setFavorite(favorite);
+    return dispatch(favoritesActions.add(favorite));
+  };
+
+  const onDeleteFavorite = async () => {
+    const favorite = favorites.find((fav) => fav.productId === productId);
+
+    const favoriteToBeDeleted = await deleteFavorite(favorite.id);
+
+    return dispatch(favoritesActions.delete(favoriteToBeDeleted));
   };
 
   return (
@@ -58,7 +60,7 @@ export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
         </button>
       )}
       {isFavourite ? (
-        <button type="button" className="button">
+        <button onClick={onDeleteFavorite} type="button" className="button">
           <span className="icon">
             <AiFillHeart size="24px" className="has-text-danger-dark" />
           </span>
