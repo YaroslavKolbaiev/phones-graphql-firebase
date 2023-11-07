@@ -1,49 +1,43 @@
-/* eslint-disable max-len */
-import { useContext } from 'react';
 import { NoProductsWaring } from '../../components/NoProductsWaring';
 import { ReturnButton } from '../../components/ProductDetails/ProductParts/ReturnButton';
-import { ProductsContext } from '../../context/ProductsContext';
-import { CardItem } from '../../types/Cart';
+import { useAppDispatch, useAppSelector } from '../../hooks/ReduxApp';
+import {
+  actions as cartActions,
+  name as cartCollection,
+} from '../../redux/features/cart';
+import { ImCross } from 'react-icons/im';
+import { FaMinus, FaPlus, FaDollarSign } from 'react-icons/fa';
+import { deleteFavOrCart } from '../../graphql/queries';
 
 export const CartPage = () => {
-  const { cart, setCart } = useContext(ProductsContext);
+  const dispatch = useAppDispatch();
+  const { cart } = useAppSelector((state) => state.cart);
 
-  const removeFromCart = (cartItem: CardItem) => {
-    setCart(cart.filter((cartProduct) => cartProduct.id !== cartItem.id));
+  // const removeFromCart = (cartItem: CardItem) => {
+  //   setCart(cart.filter((cartProduct) => cartProduct.id !== cartItem.id));
+  // };
+
+  const handleDeleteCart = async (cartId: string) => {
+    const { favorite, error } = await deleteFavOrCart(cartId, cartCollection);
+
+    if (error) {
+      alert(error);
+    }
+
+    return dispatch(cartActions.delete(favorite.id));
   };
 
-  const handleIncrement = (cardId: string) => {
-    setCart((cartItem) =>
-      cartItem.map((item) =>
-        cardId === item.id
-          ? {
-              ...item,
-              quantity: item.quantity + (item.quantity < 10 ? 1 : 0),
-            }
-          : item
-      )
-    );
-  };
+  const handleIncrement = (cardId: string) =>
+    dispatch(cartActions.increment(cardId));
+  const handleDecrement = (cardId: string) =>
+    dispatch(cartActions.decrement(cardId));
 
-  const handleDecrement = (cardId: string) => {
-    setCart((cartItem) =>
-      cartItem.map((item) =>
-        cardId === item.id
-          ? {
-              ...item,
-              quantity: item.quantity - (item.quantity > 1 ? 1 : 0),
-            }
-          : item
-      )
-    );
-  };
-
-  const getTotalPrice = cart
-    .map((x) => x.price * x.quantity)
-    .reduce((x, y) => x + y, 0);
+  const totalPrice = cart
+    .map((cartItem) => cartItem.product.price * cartItem.quantity)
+    .reduce((a, b) => a + b, 0);
 
   return (
-    <div className="section">
+    <div className="section is-flex-grow-1">
       <div className="container">
         <ReturnButton />
         <h1 className="title has-text-weight-bold">Cart</h1>
@@ -53,25 +47,29 @@ export const CartPage = () => {
               {cart.map((cartItem) => (
                 <div className="box" key={cartItem.id}>
                   <div className="is-flex is-justify-content-space-between">
-                    <div className="is-flex is-align-items-center">
+                    <div
+                      style={{ gap: '10px' }}
+                      className="is-flex is-align-items-center"
+                    >
                       <button
-                        style={{ border: 'none' }}
                         type="button"
                         className="button"
                         onClick={() => {
-                          removeFromCart(cartItem);
+                          handleDeleteCart(cartItem.id);
                         }}
                       >
                         <span className="icon">
-                          <i className="fa-solid fa-xmark has-text-grey-light" />
+                          <ImCross className="has-text-danger" />
                         </span>
                       </button>
                       <figure className="image is-96x96">
-                        <img src={cartItem.imageUrl} alt="Img" />
+                        <img src={cartItem.product.imageUrl} alt="Img" />
                       </figure>
-                      <p>{cartItem.name}</p>
+                      <p>
+                        {cartItem.product.name} {cartItem.product.model}
+                      </p>
                     </div>
-                    <div style={{ gap: 20 }} className="is-flex">
+                    <div style={{ gap: '20px' }} className="is-flex">
                       <div className="is-flex is-align-items-center">
                         <button
                           disabled={cartItem.quantity === 1}
@@ -82,21 +80,20 @@ export const CartPage = () => {
                           }}
                         >
                           <span className="icon">
-                            <i className="fa-solid fa-minus" />
+                            <FaMinus />
                           </span>
                         </button>
                         <p className="has-text-centered" style={{ width: 30 }}>
                           {cartItem.quantity}
                         </p>
                         <button
+                          disabled={cartItem.quantity === 10}
+                          onClick={() => handleIncrement(cartItem.id)}
                           type="button"
                           className="button is-small"
-                          onClick={() => {
-                            handleIncrement(cartItem.id);
-                          }}
                         >
                           <span className="icon">
-                            <i className="fa-solid fa-plus" />
+                            <FaPlus />
                           </span>
                         </button>
                       </div>
@@ -104,8 +101,8 @@ export const CartPage = () => {
                         style={{ width: 70 }}
                         className="is-flex is-align-items-center has-text-weight-bold"
                       >
-                        <i className="fa-solid fa-dollar-sign" />
-                        {cartItem.price * cartItem.quantity}
+                        <FaDollarSign />
+                        {cartItem.quantity * cartItem.product.price}
                       </div>
                     </div>
                   </div>
@@ -115,8 +112,8 @@ export const CartPage = () => {
             <div className="column">
               <div className="box">
                 <p className="has-text-centered has-text-weight-bold is-size-4">
-                  <i className="fa-solid fa-dollar-sign" />
-                  {getTotalPrice}
+                  <FaDollarSign />
+                  {totalPrice}
                 </p>
                 <p className="has-text-centered has-text-grey-light is-size-7">
                   {`Total for ${cart.length} items`}

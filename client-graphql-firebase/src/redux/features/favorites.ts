@@ -1,7 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { PRODUCT_FRAGMENT, getFavorites } from '../../graphql/queries';
-import { getFragmentData } from '../../generated';
-import { Favorites, ProductDetailsFragment } from '../../generated/graphql';
+import { getFavOrCart } from '../../graphql/queries';
+import { Favorites } from '../../generated/graphql';
+
+const FAVORITES = 'favorites';
 
 const initialState: { favorites: Favorites[] } = {
   favorites: [],
@@ -10,7 +11,7 @@ const initialState: { favorites: Favorites[] } = {
 export const initFavorites = createAsyncThunk(
   'favorites/fetch',
   async (userId: string) => {
-    const { favorites } = await getFavorites(userId);
+    const { favorites } = await getFavOrCart(userId, favoritesSlice.name);
 
     return favorites;
   }
@@ -36,5 +37,5 @@ const favoritesSlice = createSlice({
   },
 });
 
-export const { actions } = favoritesSlice;
+export const { actions, name } = favoritesSlice;
 export default favoritesSlice.reducer;

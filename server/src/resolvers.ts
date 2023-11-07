@@ -24,7 +24,8 @@ export const resolvers: Resolvers = {
 
       return product;
     },
-    favorites: async (_root, { userId }) => favoritesByUser(userId),
+    favorites: async (_root, { userId, collection }) =>
+      favoritesByUser(userId, collection),
   },
   Favorites: {
     product: (parentIsFavorites) => {
@@ -33,7 +34,8 @@ export const resolvers: Resolvers = {
   },
   Mutation: {
     addFavorite: (_root, args) => addFavorite(args),
-    deleteFavorite: (_root, { favoritId }) => deleteFavorite(favoritId),
+    deleteFavorite: (_root, { favoritId, collection }) =>
+      deleteFavorite({ favoritId, collection }),
   },
 };
 

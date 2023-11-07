@@ -35,7 +35,7 @@ export const App = () => {
             <Route path=":productId" element={<ProductDetails />} />
           </Route>
           <Route
-            path="favourites"
+            path="favorites"
             element={
               <NotAuth>
                 <Favourites />

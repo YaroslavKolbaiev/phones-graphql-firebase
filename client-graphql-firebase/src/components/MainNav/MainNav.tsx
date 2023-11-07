@@ -17,8 +17,6 @@ export const MainNav: React.FC = () => {
     .filter((x) => x)
     .join('');
   const nodeRef = useRef(null);
-  const isPhonePage =
-    location === 'favourites' || 'phones' || 'tablets' || 'accessories';
 
   return (
     <nav

@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { User } from 'firebase/auth';
 import { FirebaseAuthService } from '../../firebase/FirebaseAuthServer';
 import store from '../store';
-import { getAuth } from 'firebase/auth';
 import { initFavorites } from './favorites';
+import { initCart } from './cart';
 
 const initialState: { userData: User | null } = {
   userData: null,
@@ -30,9 +30,8 @@ FirebaseAuthService.subscribeToAuthChanges((dataFromFirebase) => {
       uid,
     };
 
-    // return store.dispatch(userSlice.actions.set(user));
     store.dispatch(userSlice.actions.set(user));
-
+    store.dispatch(initCart(uid));
     return store.dispatch(initFavorites(uid));
   }
 

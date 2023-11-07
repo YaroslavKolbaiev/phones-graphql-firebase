@@ -51,8 +51,8 @@ export const PRODUCT_QUERY = graphql(`
 `);
 
 export const FAVORITES_QUERY = graphql(`
-  query Favorites($userId: ID!) {
-    favorites(userId: $userId) {
+  query Favorites($userId: ID!, $collection: String!) {
+    favorites(userId: $userId, collection: $collection) {
       id
       product {
         ...productDetails
@@ -64,8 +64,16 @@ export const FAVORITES_QUERY = graphql(`
 `);
 
 export const ADD_FAVORITE = graphql(`
-  mutation AddFavorite($userId: String!, $productId: String!) {
-    favorite: addFavorite(userId: $userId, productId: $productId) {
+  mutation AddFavorite(
+    $userId: String!
+    $productId: String!
+    $collection: String!
+  ) {
+    favorite: addFavorite(
+      userId: $userId
+      productId: $productId
+      collection: $collection
+    ) {
       id
       product {
         ...productDetails
@@ -77,8 +85,11 @@ export const ADD_FAVORITE = graphql(`
 `);
 
 export const DELETE_FAVORITE = graphql(`
-  mutation DeleteFavorite($favoritId: String) {
-    favoriteData: deleteFavorite(favoritId: $favoritId) {
+  mutation DeleteFavorite($favoritId: String!, $collection: String!) {
+    favoriteData: deleteFavorite(
+      favoritId: $favoritId
+      collection: $collection
+    ) {
       id
       productId
       userId
@@ -101,7 +112,7 @@ export async function getProducts({
 
     return { products: res.data.products };
   } catch (error) {
-    throw { error: error.message };
+    return { error: error.message };
   }
 }
 
@@ -114,15 +125,15 @@ export async function getProduct(productId: string) {
 
     return { product: res.data.product };
   } catch (error) {
-    throw { error: error.message };
+    return { error: error.message };
   }
 }
 
-export async function getFavorites(userId: string) {
+export async function getFavOrCart(userId: string, collection: string) {
   try {
     const res = await apolloClient.query({
       query: FAVORITES_QUERY,
-      variables: { userId },
+      variables: { userId, collection },
     });
 
     const favoritesWithFragment: Favorites[] = [];
@@ -142,16 +153,17 @@ export async function getFavorites(userId: string) {
 
     return { favorites: favoritesWithFragment };
   } catch (error) {
-    throw { error: error.message };
+    return { error: error.message };
   }
 }
 
 interface AddFavoriteProps {
   userId: string;
   productId: string;
+  collection: string;
 }
 
-export async function addFavorite(args: AddFavoriteProps) {
+export async function addFavOrCart(args: AddFavoriteProps) {
   try {
     const res = await apolloClient.mutate({
       mutation: ADD_FAVORITE,
@@ -162,21 +174,23 @@ export async function addFavorite(args: AddFavoriteProps) {
 
     const productFragmentData = getFragmentData(PRODUCT_FRAGMENT, product);
 
-    return { id, productId, userId, product: productFragmentData };
+    return {
+      favorite: { id, productId, userId, product: productFragmentData },
+    };
   } catch (error) {
-    throw { error: error.message };
+    return { error: error.message };
   }
 }
 
-export async function deleteFavorite(favoritId: string) {
+export async function deleteFavOrCart(favoritId: string, collection: string) {
   try {
     const res = await apolloClient.mutate({
       mutation: DELETE_FAVORITE,
-      variables: { favoritId },
+      variables: { favoritId, collection },
     });
 
-    return res.data.favoriteData;
+    return { favorite: res.data.favoriteData };
   } catch (error) {
-    throw { error: error.message };
+    return { error: error.message };
   }
 }

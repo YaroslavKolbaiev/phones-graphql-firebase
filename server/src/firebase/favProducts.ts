@@ -11,8 +11,8 @@ export async function favProducts(productId: string) {
   return product as Product;
 }
 
-export async function favoritesByUser(userId: string) {
-  const collectionRef = connection.collection('favorites');
+export async function favoritesByUser(userId: string, collection: string) {
+  const collectionRef = connection.collection(collection);
 
   const favorites = [];
 
@@ -30,22 +30,24 @@ export async function favoritesByUser(userId: string) {
   return favorites as Favorites[];
 }
 
-interface Favs {
+interface AddProps {
   productId: string;
   userId: string;
+  collection: string;
 }
 
-export async function addFavorite(args: Favs) {
-  const collectionRef = connection.collection('favorites');
+export async function addFavorite(args: AddProps) {
+  const { productId, userId, collection } = args;
+  const collectionRef = connection.collection(collection);
   const snapshot = await collectionRef
-    .where('productId', '==', args.productId)
+    .where('productId', '==', productId)
     .get();
 
   if (!snapshot.empty) {
     throw new Error('Product has been already added to favorites');
   }
 
-  const res = await collectionRef.add(args);
+  const res = await collectionRef.add({ productId, userId });
 
   const favorite = {
     id: res.id,
@@ -56,10 +58,18 @@ export async function addFavorite(args: Favs) {
   return favorite;
 }
 
-export async function deleteFavorite(favId: string) {
-  const favRef = connection.collection('favorites').doc(favId);
+interface DeleteProps {
+  favoritId: string;
+  collection: string;
+}
 
-  const favoriteToBeDeleted = (await favRef.get()).data() as Favs;
+export async function deleteFavorite({ favoritId, collection }: DeleteProps) {
+  const favRef = connection.collection(collection).doc(favoritId);
+
+  const favoriteToBeDeleted = (await favRef.get()).data() as {
+    productId: string;
+    userId: string;
+  };
 
   if (!favoriteToBeDeleted) {
     throw new Error('Product not found');

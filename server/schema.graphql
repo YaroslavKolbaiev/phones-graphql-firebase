@@ -6,7 +6,7 @@ type Query {
     startAt: String
     sort: String
   ): ProductSublist
-  favorites(userId: ID!): [Favorites]
+  favorites(userId: ID!, collection: String!): [Favorites]
 }
 
 type ProductSublist {
@@ -43,6 +43,10 @@ type Product {
 }
 
 type Mutation {
-  addFavorite(userId: String!, productId: String!): Favorites
-  deleteFavorite(favoritId: String): Favorites
+  addFavorite(
+    userId: String!
+    productId: String!
+    collection: String!
+  ): Favorites
+  deleteFavorite(favoritId: String!, collection: String!): Favorites
 }

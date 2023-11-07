@@ -1,7 +1,10 @@
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAppDispatch, useAppSelector } from '../../../hooks/ReduxApp';
-import { actions as favoritesActions } from '../../../redux/features/favorites';
-import { addFavorite, deleteFavorite } from '../../../graphql/queries';
+import {
+  actions as favoritesActions,
+  name as favoritesCollection,
+} from '../../../redux/features/favorites';
+import { addFavOrCart, deleteFavOrCart } from '../../../graphql/queries';
 
 type Props = {
   productId: string;
@@ -17,17 +20,32 @@ export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
   );
 
   const onAddFavorite = async () => {
-    const favorite = await addFavorite({ productId, userId });
+    const { favorite, error } = await addFavOrCart({
+      productId,
+      userId,
+      collection: favoritesCollection,
+    });
+
+    if (error) {
+      alert(error);
+    }
 
     return dispatch(favoritesActions.add(favorite));
   };
 
   const onDeleteFavorite = async () => {
-    const favorite = favorites.find((fav) => fav.productId === productId);
+    const findFavorite = favorites.find((fav) => fav.productId === productId);
 
-    const favoriteToBeDeleted = await deleteFavorite(favorite.id);
+    const { favorite, error } = await deleteFavOrCart(
+      findFavorite.id,
+      favoritesCollection
+    );
 
-    return dispatch(favoritesActions.delete(favoriteToBeDeleted));
+    if (error) {
+      alert(error);
+    }
+
+    return dispatch(favoritesActions.delete(favorite));
   };
 
   return (
