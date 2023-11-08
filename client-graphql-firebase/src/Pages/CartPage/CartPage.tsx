@@ -7,25 +7,13 @@ import {
 } from '../../redux/features/cart';
 import { ImCross } from 'react-icons/im';
 import { FaMinus, FaPlus, FaDollarSign } from 'react-icons/fa';
-import { deleteFavOrCart } from '../../graphql/queries';
+import { useDeleteCart } from '../../hooks/cartAndFavs';
 
 export const CartPage = () => {
   const dispatch = useAppDispatch();
   const { cart } = useAppSelector((state) => state.cart);
 
-  // const removeFromCart = (cartItem: CardItem) => {
-  //   setCart(cart.filter((cartProduct) => cartProduct.id !== cartItem.id));
-  // };
-
-  const handleDeleteCart = async (cartId: string) => {
-    const { favorite, error } = await deleteFavOrCart(cartId, cartCollection);
-
-    if (error) {
-      alert(error);
-    }
-
-    return dispatch(cartActions.delete(favorite.id));
-  };
+  const { deleteCart } = useDeleteCart();
 
   const handleIncrement = (cardId: string) =>
     dispatch(cartActions.increment(cardId));
@@ -55,7 +43,10 @@ export const CartPage = () => {
                         type="button"
                         className="button"
                         onClick={() => {
-                          handleDeleteCart(cartItem.id);
+                          deleteCart({
+                            id: cartItem.id,
+                            collection: cartCollection,
+                          });
                         }}
                       >
                         <span className="icon">

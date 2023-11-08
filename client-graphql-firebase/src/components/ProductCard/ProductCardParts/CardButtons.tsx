@@ -1,10 +1,14 @@
+import { useMemo } from 'react';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
-import { useAppDispatch, useAppSelector } from '../../../hooks/ReduxApp';
+import { useAppSelector } from '../../../hooks/ReduxApp';
+import { name as favoritesCollection } from '../../../redux/features/favorites';
+import { name as cartCollection } from '../../../redux/features/cart';
 import {
-  actions as favoritesActions,
-  name as favoritesCollection,
-} from '../../../redux/features/favorites';
-import { addFavOrCart, deleteFavOrCart } from '../../../graphql/queries';
+  useAddCart,
+  useAddFavorite,
+  useDeleteCart,
+  useDeleteFavorite,
+} from '../../../hooks/cartAndFavs';
 
 type Props = {
   productId: string;
@@ -12,45 +16,25 @@ type Props = {
 };
 
 export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
-  const dispatch = useAppDispatch();
   const { favorites } = useAppSelector((state) => state.favorites);
+  const { cart } = useAppSelector((state) => state.cart);
 
-  const isFavourite = favorites?.some(
-    (favProduct) => favProduct.productId === productId
-  );
+  const { addCart } = useAddCart();
+  const { deleteCart } = useDeleteCart();
+  const { addFavorite } = useAddFavorite();
+  const { deleteFavorite } = useDeleteFavorite();
 
-  const onAddFavorite = async () => {
-    const { favorite, error } = await addFavOrCart({
-      productId,
-      userId,
-      collection: favoritesCollection,
-    });
+  const isFavourite = useMemo(() => {
+    return favorites.find((favProduct) => favProduct.productId === productId);
+  }, [favorites]);
 
-    if (error) {
-      alert(error);
-    }
-
-    return dispatch(favoritesActions.add(favorite));
-  };
-
-  const onDeleteFavorite = async () => {
-    const findFavorite = favorites.find((fav) => fav.productId === productId);
-
-    const { favorite, error } = await deleteFavOrCart(
-      findFavorite.id,
-      favoritesCollection
-    );
-
-    if (error) {
-      alert(error);
-    }
-
-    return dispatch(favoritesActions.delete(favorite));
-  };
+  const isCart = useMemo(() => {
+    return cart.find((cartProduct) => cartProduct.productId === productId);
+  }, [cart]);
 
   return (
     <p className="buttons">
-      {false ? (
+      {isCart ? (
         <button
           type="button"
           className="button
@@ -59,7 +43,9 @@ export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
             has-background-white
             has-text-success
           "
-          // onClick={removeFromCart}
+          onClick={() =>
+            deleteCart({ id: isCart.id, collection: cartCollection })
+          }
         >
           Added to cart
         </button>
@@ -72,19 +58,36 @@ export const CardButtons: React.FC<Props> = ({ productId, userId }) => {
             has-background-dark
             has-text-light
            "
-          // onClick={addToCart}
+          onClick={() =>
+            addCart({ productId, userId, collection: cartCollection })
+          }
         >
           Add to cart
         </button>
       )}
       {isFavourite ? (
-        <button onClick={onDeleteFavorite} type="button" className="button">
+        <button
+          onClick={() =>
+            deleteFavorite({
+              id: isFavourite.id,
+              collection: favoritesCollection,
+            })
+          }
+          type="button"
+          className="button"
+        >
           <span className="icon">
             <AiFillHeart size="24px" className="has-text-danger-dark" />
           </span>
         </button>
       ) : (
-        <button type="button" className="button" onClick={onAddFavorite}>
+        <button
+          type="button"
+          className="button"
+          onClick={() =>
+            addFavorite({ productId, userId, collection: favoritesCollection })
+          }
+        >
           <span className="icon">
             <AiOutlineHeart size="24px" />
           </span>

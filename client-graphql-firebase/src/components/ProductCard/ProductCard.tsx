@@ -7,6 +7,7 @@ import { ProductDetailsFragment } from '../../generated/graphql';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PlaceholderImage from '../../img/placeholder.jpg';
 import { useAppSelector } from '../../hooks/ReduxApp';
+import { useState } from 'react';
 
 type Props = {
   product: ProductDetailsFragment;
@@ -14,8 +15,11 @@ type Props = {
 
 export const ProductCard: React.FC<Props> = ({ product }) => {
   const { userData } = useAppSelector((state) => state.user);
+  const [testRender, setTestRender] = useState(1);
   return (
     <div className="card is-shadowless productCard">
+      <button onClick={() => setTestRender(testRender + 1)}>RUN</button>
+      <div>{testRender}</div>
       <Link
         className="has-text-dark"
         to={`/${product.type}s/${product.id}`}
