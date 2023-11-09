@@ -2,8 +2,6 @@ import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFavOrCart } from '../../graphql/queries';
 import { Favorites } from '../../generated/graphql';
 
-const FAVORITES = 'favorites';
-
 const initialState: { favorites: Favorites[] } = {
   favorites: [],
 };

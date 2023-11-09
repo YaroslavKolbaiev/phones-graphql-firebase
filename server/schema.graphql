@@ -49,4 +49,5 @@ type Mutation {
     collection: String!
   ): Favorites
   deleteFavorite(favoritId: String!, collection: String!): Favorites
+  deleteCart(userId: String!): String
 }

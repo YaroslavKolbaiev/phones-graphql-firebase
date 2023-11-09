@@ -97,6 +97,12 @@ export const DELETE_FAVORITE = graphql(`
   }
 `);
 
+export const DELETE_CART = graphql(`
+  mutation Mutation($userId: String!) {
+    deleteCart(userId: $userId)
+  }
+`);
+
 export async function getProducts({
   type,
   limit,
@@ -190,6 +196,19 @@ export async function deleteFavOrCart(favoritId: string, collection: string) {
     });
 
     return { favorite: res.data.favoriteData };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+
+export async function onCheckOut(userId: string) {
+  try {
+    const res = await apolloClient.mutate({
+      mutation: DELETE_CART,
+      variables: { userId },
+    });
+
+    return { userId };
   } catch (error) {
     return { error: error.message };
   }

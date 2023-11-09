@@ -79,3 +79,15 @@ export async function deleteFavorite({ favoritId, collection }: DeleteProps) {
 
   return { id: favRef.id, ...favoriteToBeDeleted };
 }
+
+export async function deleteCartByUser(userId: string) {
+  const collectionRef = connection.collection('cart');
+
+  const snapshot = await collectionRef.where('userId', '==', userId).get();
+
+  snapshot.forEach(async (doc) => {
+    await collectionRef.doc(doc.id).delete();
+  });
+
+  return userId;
+}

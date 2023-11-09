@@ -37,6 +37,9 @@ const cartSlice = createSlice({
     delete: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.filter((cart) => cart.id !== action.payload);
     },
+    clear: (state) => {
+      state.cart = [];
+    },
     increment: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.map((cartItem) =>
         cartItem.id === action.payload

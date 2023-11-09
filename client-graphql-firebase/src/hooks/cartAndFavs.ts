@@ -1,4 +1,4 @@
-import { addFavOrCart, deleteFavOrCart } from '../graphql/queries';
+import { addFavOrCart, deleteFavOrCart, onCheckOut } from '../graphql/queries';
 import { useAppDispatch } from './ReduxApp';
 import { actions as cartActions } from '../redux/features/cart';
 import { actions as favoritesActions } from '../redux/features/favorites';
@@ -92,4 +92,20 @@ export const useDeleteFavorite = () => {
   };
 
   return { deleteFavorite };
+};
+
+export const useCheckout = () => {
+  const dispatch = useAppDispatch();
+
+  const checkout = async (userId: string) => {
+    const { error } = await onCheckOut(userId);
+
+    if (error) {
+      return alert(error);
+    }
+
+    return dispatch(cartActions.clear());
+  };
+
+  return { checkout };
 };

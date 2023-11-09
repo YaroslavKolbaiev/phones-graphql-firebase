@@ -3,6 +3,7 @@ import { getProduct, getProducts } from './firebase/products.js';
 import { Resolvers } from './generated/schema.js';
 import {
   addFavorite,
+  deleteCartByUser,
   deleteFavorite,
   favProducts,
   favoritesByUser,
@@ -36,6 +37,7 @@ export const resolvers: Resolvers = {
     addFavorite: (_root, args) => addFavorite(args),
     deleteFavorite: (_root, { favoritId, collection }) =>
       deleteFavorite({ favoritId, collection }),
+    deleteCart: (_root, { userId }) => deleteCartByUser(userId),
   },
 };
 

@@ -19,6 +19,7 @@ const documents = {
     "\n  query Favorites($userId: ID!, $collection: String!) {\n    favorites(userId: $userId, collection: $collection) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n": types.FavoritesDocument,
     "\n  mutation AddFavorite(\n    $userId: String!\n    $productId: String!\n    $collection: String!\n  ) {\n    favorite: addFavorite(\n      userId: $userId\n      productId: $productId\n      collection: $collection\n    ) {\n      id\n      product {\n        ...productDetails\n      }\n      productId\n      userId\n    }\n  }\n": types.AddFavoriteDocument,
     "\n  mutation DeleteFavorite($favoritId: String!, $collection: String!) {\n    favoriteData: deleteFavorite(\n      favoritId: $favoritId\n      collection: $collection\n    ) {\n      id\n      productId\n      userId\n    }\n  }\n": types.DeleteFavoriteDocument,
+    "\n  mutation Mutation($userId: String!) {\n    deleteCart(userId: $userId)\n  }\n": types.MutationDocument,
 };
 
 /**
@@ -59,6 +60,10 @@ export function graphql(source: "\n  mutation AddFavorite(\n    $userId: String!
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation DeleteFavorite($favoritId: String!, $collection: String!) {\n    favoriteData: deleteFavorite(\n      favoritId: $favoritId\n      collection: $collection\n    ) {\n      id\n      productId\n      userId\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteFavorite($favoritId: String!, $collection: String!) {\n    favoriteData: deleteFavorite(\n      favoritId: $favoritId\n      collection: $collection\n    ) {\n      id\n      productId\n      userId\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation Mutation($userId: String!) {\n    deleteCart(userId: $userId)\n  }\n"): (typeof documents)["\n  mutation Mutation($userId: String!) {\n    deleteCart(userId: $userId)\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
