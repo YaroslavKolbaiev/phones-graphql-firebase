@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { BreadCrumb } from '../Breadcrumb';
 import { ReactSlider } from '../ReactSlider';

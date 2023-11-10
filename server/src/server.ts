@@ -4,9 +4,6 @@ import cors from 'cors';
 import express from 'express';
 import { readFile } from 'node:fs/promises';
 import { resolvers } from './resolvers.js';
-// import { ResolverContext, resolvers } from './resolvers.js';
-// import { createCompanyLoader } from './db/companies.js';
-// import { getUser } from './db/users.js';
 
 const PORT = 9000;
 

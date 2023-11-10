@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { useState, useRef, useContext } from 'react';
+import { useState, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { Burger } from '../Burger';
 import { PageNavLink } from '../PageNavLink';
