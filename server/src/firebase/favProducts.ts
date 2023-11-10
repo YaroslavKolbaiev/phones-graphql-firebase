@@ -41,6 +41,7 @@ export async function addFavorite(args: AddProps) {
   const collectionRef = connection.collection(collection);
   const snapshot = await collectionRef
     .where('productId', '==', productId)
+    .where('userId', '==', userId)
     .get();
 
   if (!snapshot.empty) {

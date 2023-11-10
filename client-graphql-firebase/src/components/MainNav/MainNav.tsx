@@ -65,7 +65,7 @@ export const MainNav: React.FC = () => {
               <FavsAndBasket />
             </>
           ) : (
-            <PageNavLink text="Login" to="auth" />
+            <PageNavLink text="LOGIN" to="auth" />
           )}
         </div>
       </CSSTransition>

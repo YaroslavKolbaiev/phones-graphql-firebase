@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FirebaseAuthService } from '../../firebase/FirebaseAuthServer';
 import { useAppSelector } from '../../hooks/ReduxApp';
 
@@ -20,7 +20,7 @@ export const UserPage: React.FC = () => {
         </div>
       </section>
       <div
-        style={{ marginTop: '-100px' }}
+        style={{ marginTop: '-30px' }}
         className="is-flex is-justify-content-center"
       >
         <div
@@ -36,13 +36,26 @@ export const UserPage: React.FC = () => {
             is-align-items-center
           "
         >
-          <p className="has-text-black">{userData?.displayName}</p>
+          <p className="has-text-black is-size-6">
+            {userData?.displayName || userData?.email.split('@')[0]}
+          </p>
         </div>
       </div>
-      <div className="is-flex is-justify-content-center p-4 is-flex-grow-1">
+      <div className="is-flex is-justify-content-center p-4">
         <button onClick={onLogOut} type="button" className="button is-dark">
           Log Out
         </button>
+      </div>
+      <div
+        style={{ gap: '20px' }}
+        className="is-flex is-flex-direction-column is-flex-grow-1 p-6 mt-6"
+      >
+        <Link className="is-size-3" to="/cart">
+          My Cart
+        </Link>
+        <Link className="is-size-3" to="/favorites">
+          My Favorites
+        </Link>
       </div>
     </>
   );
