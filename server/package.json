@@ -4,7 +4,8 @@
   "scripts": {
     "build": "tsc",
     "start": "concurrently \"nodemon src/server.ts\" \"graphql-codegen --config codegen.json --watch\"",
-    "codegen": "graphql-codegen --config codegen.json"
+    "codegen": "graphql-codegen --config codegen.json",
+    "production": "src/server.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.6.0",

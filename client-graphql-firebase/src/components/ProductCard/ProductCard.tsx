@@ -7,7 +7,6 @@ import { ProductDetailsFragment } from '../../generated/graphql';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PlaceholderImage from '../../img/placeholder.jpg';
 import { useAppSelector } from '../../hooks/ReduxApp';
-import { useState } from 'react';
 
 type Props = {
   product: ProductDetailsFragment;
