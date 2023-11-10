@@ -129,7 +129,7 @@ export const ProductPage: React.FC<Props> = ({ type }) => {
           </div>
         </div>
       </div>
-      {productsByType.length && !endOfData && (
+      {productsByType.length > 0 && !endOfData && (
         <Observer prods={productsByType} callback={fetchProducts} />
       )}
     </>

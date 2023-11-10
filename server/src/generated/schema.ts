@@ -24,6 +24,30 @@ export type Favorites = {
   userId: Scalars['String']['output'];
 };
 
+export type Mutation = {
+  addFavorite?: Maybe<Favorites>;
+  deleteCart?: Maybe<Scalars['String']['output']>;
+  deleteFavorite?: Maybe<Favorites>;
+};
+
+
+export type MutationAddFavoriteArgs = {
+  collection: Scalars['String']['input'];
+  productId: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteCartArgs = {
+  userId: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteFavoriteArgs = {
+  collection: Scalars['String']['input'];
+  favoritId: Scalars['String']['input'];
+};
+
 export type Product = {
   age?: Maybe<Scalars['Int']['output']>;
   camera?: Maybe<Scalars['String']['output']>;
@@ -58,6 +82,7 @@ export type Query = {
 
 
 export type QueryFavoritesArgs = {
+  collection: Scalars['String']['input'];
   userId: Scalars['ID']['input'];
 };
 
@@ -149,6 +174,7 @@ export type ResolversTypes = {
   Favorites: ResolverTypeWrapper<Favorites>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Product: ResolverTypeWrapper<Product>;
   ProductSublist: ResolverTypeWrapper<ProductSublist>;
   Query: ResolverTypeWrapper<{}>;
@@ -161,6 +187,7 @@ export type ResolversParentTypes = {
   Favorites: Favorites;
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Mutation: {};
   Product: Product;
   ProductSublist: ProductSublist;
   Query: {};
@@ -173,6 +200,12 @@ export type FavoritesResolvers<ContextType = any, ParentType extends ResolversPa
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addFavorite?: Resolver<Maybe<ResolversTypes['Favorites']>, ParentType, ContextType, RequireFields<MutationAddFavoriteArgs, 'collection' | 'productId' | 'userId'>>;
+  deleteCart?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationDeleteCartArgs, 'userId'>>;
+  deleteFavorite?: Resolver<Maybe<ResolversTypes['Favorites']>, ParentType, ContextType, RequireFields<MutationDeleteFavoriteArgs, 'collection' | 'favoritId'>>;
 };
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
@@ -204,13 +237,14 @@ export type ProductSublistResolvers<ContextType = any, ParentType extends Resolv
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  favorites?: Resolver<Maybe<Array<Maybe<ResolversTypes['Favorites']>>>, ParentType, ContextType, RequireFields<QueryFavoritesArgs, 'userId'>>;
+  favorites?: Resolver<Maybe<Array<Maybe<ResolversTypes['Favorites']>>>, ParentType, ContextType, RequireFields<QueryFavoritesArgs, 'collection' | 'userId'>>;
   product?: Resolver<Maybe<ResolversTypes['Product']>, ParentType, ContextType, RequireFields<QueryProductArgs, 'id'>>;
   products?: Resolver<Maybe<ResolversTypes['ProductSublist']>, ParentType, ContextType, Partial<QueryProductsArgs>>;
 };
 
 export type Resolvers<ContextType = any> = {
   Favorites?: FavoritesResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductSublist?: ProductSublistResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

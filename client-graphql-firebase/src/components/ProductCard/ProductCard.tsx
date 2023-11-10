@@ -7,6 +7,7 @@ import { ProductDetailsFragment } from '../../generated/graphql';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PlaceholderImage from '../../img/placeholder.jpg';
 import { useAppSelector } from '../../hooks/ReduxApp';
+import { useState } from 'react';
 
 type Props = {
   product: ProductDetailsFragment;
@@ -38,7 +39,9 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         <hr className="mb-2 mt-0" />
         <SpecsPart product={product} />
 
-        {userData && <CardButtons productId={product.id} />}
+        {userData && (
+          <CardButtons userId={userData.uid} productId={product.id} />
+        )}
       </div>
     </div>
   );

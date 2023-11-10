@@ -1,7 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { BiSearchAlt } from 'react-icons/bi';
-import { useAppDispatch, useAppSelector } from '../../hooks/ReduxApp';
-import { actions as productsByTypeActions } from '../../redux/features/productsByType';
+import { useAppSelector } from '../../hooks/ReduxApp';
 import { useEffect } from 'react';
 import { useFilter, useProductsByFilter } from '../../redux/reduxHelpers';
 

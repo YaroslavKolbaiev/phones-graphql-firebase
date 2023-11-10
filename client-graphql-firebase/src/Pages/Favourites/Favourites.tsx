@@ -1,22 +1,28 @@
-import { useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { BreadCrumb } from '../../components/Breadcrumb';
 import { NoProductsWaring } from '../../components/NoProductsWaring';
 import { ProductCard } from '../../components/ProductCard';
-import { ProductsContext } from '../../context/ProductsContext';
 import { useAppSelector } from '../../hooks/ReduxApp';
+import { Pagination } from '../../components/Pagination';
+import { useMemo } from 'react';
 
 export const Favourites = () => {
   const { favorites } = useAppSelector((state) => state.favorites);
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get('query') || '';
 
-  const visibleFavProducts = favorites.filter(({ product }) => {
-    return product.name.toLocaleLowerCase().includes(query.toLocaleLowerCase());
-  });
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page') || '1';
+  const itemsPerPage = 4;
+
+  const indexOfLastItem = +page * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const paginationHidden = itemsPerPage >= favorites.length;
+
+  const visibleFavProducts = useMemo(() => {
+    return favorites.slice(indexOfFirstItem, indexOfLastItem);
+  }, [page, favorites]);
 
   return (
-    <>
+    <div className="is-flex-grow-1">
       <div className="section py-3">
         <div className="container">
           <BreadCrumb />
@@ -29,7 +35,7 @@ export const Favourites = () => {
         </div>
       </div>
 
-      {visibleFavProducts.length !== 0 ? (
+      {favorites.length !== 0 ? (
         <div className="section">
           <div className="container">
             <div
@@ -52,11 +58,17 @@ export const Favourites = () => {
                 </div>
               ))}
             </div>
+            {!paginationHidden && (
+              <Pagination
+                totalItems={favorites.length}
+                itemsPerPage={itemsPerPage}
+              />
+            )}
           </div>
         </div>
       ) : (
         <NoProductsWaring />
       )}
-    </>
+    </div>
   );
 };

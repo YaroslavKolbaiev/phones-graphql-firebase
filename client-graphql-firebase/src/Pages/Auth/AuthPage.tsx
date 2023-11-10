@@ -89,7 +89,7 @@ export const AuthPage: React.FC = () => {
   };
 
   return (
-    <div className="hero is-medium">
+    <div className="hero is-medium is-flex-grow-1">
       <div className="hero-body">
         <form
           style={{ maxWidth: '380px' }}

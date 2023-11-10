@@ -8,12 +8,11 @@ export async function favProducts(productId: string) {
 
   const product = { id: productId, ...snapshot.data() };
 
-  // return snapshot.data() as Product;
   return product as Product;
 }
 
-export async function favoritesByUser(userId: string) {
-  const collectionRef = connection.collection('favorites');
+export async function favoritesByUser(userId: string, collection: string) {
+  const collectionRef = connection.collection(collection);
 
   const favorites = [];
 
@@ -29,4 +28,67 @@ export async function favoritesByUser(userId: string) {
   });
 
   return favorites as Favorites[];
+}
+
+interface AddProps {
+  productId: string;
+  userId: string;
+  collection: string;
+}
+
+export async function addFavorite(args: AddProps) {
+  const { productId, userId, collection } = args;
+  const collectionRef = connection.collection(collection);
+  const snapshot = await collectionRef
+    .where('productId', '==', productId)
+    .where('userId', '==', userId)
+    .get();
+
+  if (!snapshot.empty) {
+    throw new Error('Product has been already added to favorites');
+  }
+
+  const res = await collectionRef.add({ productId, userId });
+
+  const favorite = {
+    id: res.id,
+    userId: args.userId,
+    productId: args.productId,
+  };
+
+  return favorite;
+}
+
+interface DeleteProps {
+  favoritId: string;
+  collection: string;
+}
+
+export async function deleteFavorite({ favoritId, collection }: DeleteProps) {
+  const favRef = connection.collection(collection).doc(favoritId);
+
+  const favoriteToBeDeleted = (await favRef.get()).data() as {
+    productId: string;
+    userId: string;
+  };
+
+  if (!favoriteToBeDeleted) {
+    throw new Error('Product not found');
+  }
+
+  await favRef.delete();
+
+  return { id: favRef.id, ...favoriteToBeDeleted };
+}
+
+export async function deleteCartByUser(userId: string) {
+  const collectionRef = connection.collection('cart');
+
+  const snapshot = await collectionRef.where('userId', '==', userId).get();
+
+  snapshot.forEach(async (doc) => {
+    await collectionRef.doc(doc.id).delete();
+  });
+
+  return userId;
 }

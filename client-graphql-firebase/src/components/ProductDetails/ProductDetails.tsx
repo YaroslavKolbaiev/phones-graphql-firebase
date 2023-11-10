@@ -1,10 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ProductSpecs } from '../../types/ProductSpecs';
 import { BreadCrumb } from '../Breadcrumb';
 import { ReactSlider } from '../ReactSlider';
 import { CapacityButton } from './ProductParts/CapacityButton';
-import { CartAndFavButtons } from './ProductParts/CartAndFavButtons';
 import { ColorsPart } from './ProductParts/ColorsPart';
 import { ImagePart } from './ProductParts/ImagePart';
 import { MainSpecs } from './ProductParts/MainSpecs';
@@ -16,6 +14,7 @@ import { PRODUCT_FRAGMENT, getProduct } from '../../graphql/queries';
 import { getFragmentData } from '../../generated';
 import { useAppDispatch, useAppSelector } from '../../hooks/ReduxApp';
 import * as productsActions from '../../redux/features/productsForSlider';
+import { CardButtons } from '../ProductCard/ProductCardParts/CardButtons';
 
 export const ProductDetails: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +64,7 @@ export const ProductDetails: React.FC = () => {
                     discount={product?.discount}
                   />
                   {userData ? (
-                    <CartAndFavButtons />
+                    <CardButtons productId={productId} userId={userData.uid} />
                   ) : (
                     <Link to="/auth">
                       <button

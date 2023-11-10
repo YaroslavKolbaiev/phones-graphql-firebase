@@ -50,9 +50,6 @@ const productsByTypeSlice = createSlice({
             case Sort.Discount:
               return product2.discount - product1.discount;
 
-            // case Sort.Ram:
-            //   return product2.ram.localeCompare(product1.ram);
-
             default:
               return 0;
           }

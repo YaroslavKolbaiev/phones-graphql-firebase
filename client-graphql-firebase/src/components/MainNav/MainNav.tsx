@@ -17,8 +17,6 @@ export const MainNav: React.FC = () => {
     .filter((x) => x)
     .join('');
   const nodeRef = useRef(null);
-  const isPhonePage =
-    location === 'favourites' || 'phones' || 'tablets' || 'accessories';
 
   return (
     <nav
@@ -67,7 +65,7 @@ export const MainNav: React.FC = () => {
               <FavsAndBasket />
             </>
           ) : (
-            <PageNavLink text="Login" to="auth" />
+            <PageNavLink text="LOGIN" to="auth" />
           )}
         </div>
       </CSSTransition>

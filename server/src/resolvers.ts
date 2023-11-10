@@ -1,7 +1,13 @@
 import { GraphQLError } from 'graphql';
 import { getProduct, getProducts } from './firebase/products.js';
 import { Resolvers } from './generated/schema.js';
-import { favProducts, favoritesByUser } from './firebase/favProducts.js';
+import {
+  addFavorite,
+  deleteCartByUser,
+  deleteFavorite,
+  favProducts,
+  favoritesByUser,
+} from './firebase/favProducts.js';
 
 export const resolvers: Resolvers = {
   Query: {
@@ -19,12 +25,19 @@ export const resolvers: Resolvers = {
 
       return product;
     },
-    favorites: async (_root, { userId }) => favoritesByUser(userId),
+    favorites: async (_root, { userId, collection }) =>
+      favoritesByUser(userId, collection),
   },
   Favorites: {
     product: (parentIsFavorites) => {
       return favProducts(parentIsFavorites.productId);
     },
+  },
+  Mutation: {
+    addFavorite: (_root, args) => addFavorite(args),
+    deleteFavorite: (_root, { favoritId, collection }) =>
+      deleteFavorite({ favoritId, collection }),
+    deleteCart: (_root, { userId }) => deleteCartByUser(userId),
   },
 };
 
