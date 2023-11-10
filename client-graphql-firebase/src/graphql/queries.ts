@@ -4,7 +4,7 @@ import { GetProductsProps } from '../types/getProductsProps';
 import { Favorites } from '../generated/graphql';
 
 export const apolloClient = new ApolloClient({
-  uri: 'http://localhost:9000/graphql',
+  uri: 'https://phones-graphql-firebase.onrender.com/graphql',
   cache: new InMemoryCache(),
 });
 
