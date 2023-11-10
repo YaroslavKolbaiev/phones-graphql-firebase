@@ -7,6 +7,7 @@ const ProductCardSkeleton = () => {
         <p className="productCard__skeleton-line productCard__skeleton-animation"></p>
         <p className="productCard__skeleton-line productCard__skeleton-animation"></p>
         <p className="productCard__skeleton-line productCard__skeleton-animation"></p>
+        <p className="productCard__skeleton-line productCard__skeleton-animation"></p>
         <p className="productCard__skeleton-lastLine productCard__skeleton-animation"></p>
       </div>
     </div>

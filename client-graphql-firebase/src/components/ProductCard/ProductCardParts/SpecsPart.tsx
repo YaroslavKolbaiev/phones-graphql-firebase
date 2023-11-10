@@ -15,9 +15,13 @@ export const SpecsPart: React.FC<Props> = ({ product }) => {
         <p className="has-text-grey-light">camera</p>
         <p className="has-text-weight-semibold">{product.camera}</p>
       </div>
-      <div className="is-flex is-justify-content-space-between mb-2">
+      <div className="is-flex is-justify-content-space-between">
         <p className="has-text-grey-light">RAM</p>
         <p className="has-text-weight-semibold">{product.ram}</p>
+      </div>
+      <div className="is-flex is-justify-content-space-between mb-2">
+        <p className="has-text-grey-light">Discount</p>
+        <p className="has-text-weight-semibold">{product.discount} %</p>
       </div>
     </>
   );
