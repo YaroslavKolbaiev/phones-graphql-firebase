@@ -1,6 +1,6 @@
 # Phone Catalogue
 
-[Visit_Page]([https://serene-maamoul-97d3cb.netlify.app])
+[Visit_Page](https://serene-maamoul-97d3cb.netlify.app)
 
 This project is a comprehensive full-stack web application developed using TypeScript, a statically typed superset of JavaScript that adds types to the language. TypeScript provides a safer and more robust development experience, making this application more reliable and maintainable.
 
