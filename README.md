@@ -26,4 +26,4 @@ The application is built using a variety of modern technologies:
 
 - The application's styling is handled with Bulma, a free, open-source CSS framework based on Flexbox, and SASS, a preprocessor scripting language that is interpreted or compiled into CSS.
 
-The application is live and can be visited at: https://serene-maamoul-97d3cb.netlify.app. It offers a seamless user experience, with a clean, intuitive design and a responsive layout that works well on both desktop and mobile devices.
+The application is live and can be visited at: https://serene-maamoul-97d3cb.netlify.app. It offers a seamless user experience, with a clean, intuitive design and a responsive layout that works well on both desktop and mobile devices
